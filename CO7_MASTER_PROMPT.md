@@ -58,7 +58,7 @@ Write a voice-over script in the **chosen dialect**, speaking directly to the vi
 
 | # | Block | Time (short) | Rule |
 |---|---|---|---|
-| 1 | **HOOK** | 0–4s | **The very first line is the topic itself, asked directly as a question.** No intro, no warm-up, no greeting. Split it into 1–2 caption lines. Example: "علاش فاش تانسخنو الماكلة فالمايكروويف… ماتايسخنش الطبسيل؟". On screen, show the object and the contradiction (hot food in coral, cold plate in blue). |
+| 1 | **HOOK** | 0–4s | **The very first line is the topic itself, asked directly as a question.** No intro, no warm-up, no greeting. Split it into 1–2 caption lines. Example: "علاش فاش تانسخنو الماكلة فالمايكروويف… ماتايسخنش الطبسيل؟". On screen, show the object and the contradiction (hot food in red, cold plate in blue). |
 | 2 | **STING** | 4–6s | CO7 logo reveal + the tagline of the chosen dialect (see DIALECT) |
 | 3 | **MECHANISM** | 6s–~75% | Explain how it works in 4–7 ordered steps, zooming from the whole machine down to the tiny/micro level (parts → materials → molecules/atoms) |
 | 4 | **RE-HOOKS** | every 15–20s | A new question line that restarts curiosity: "طب البخار ده هيروح فين؟" / "طب الألوان دي جاية منين؟" |
@@ -134,23 +134,23 @@ Wait for my answers. Then show a **storyboard preview**: render 6–8 key still 
 | Ink | `#1B2A3A` | All outlines and body text (never pure black) |
 | **Primary: Sky Blue** | `#2E9BEA` | Main object color, water, cold, structure |
 | Light Blue | `#BFE2F8` | Fills, glass, secondary surfaces |
-| **Accent: Coral** | `#FF6B57` | **The only loud color**: highlighted keywords, hero numbers, heat, the "important" element |
+| **Accent: CO7 Brand Red** | `#D0111B` | **The only loud color** (same red as the "7" in the logo): highlighted keywords, hero numbers, heat, the "important" element |
 | Mint | `#3CC8A0` | Secondary category color (use sparingly) |
 | Sun Yellow | `#FFC83D` | Sparks, light, energy (use sparingly) |
 | Muted Grey | `#9AA8B8` | Inactive parts, ghosted elements, faded captions |
 
-**Color rules:** 80% white and light blue, 15% ink and sky blue, **5% coral**. Use only one coral element per frame. Blue means water/cold/structure, coral means heat/importance.
+**Color rules:** 80% white and light blue, 15% ink and sky blue, **5% brand red**. Use only one red element per frame. Blue means water/cold/structure, red means heat/importance.
 
 **Illustration style:**
 - **Isometric / ¾ technical illustration**, with a **cutaway (X-ray) view**: the outer body is a transparent glass shell drawn with thin lines and dashed hidden edges, and the inner parts are fully visible.
 - **Uniform thin outlines** (2–3 px at 1080 wide), rounded joins, flat fills, no gradients except very soft ones on glass.
 - Dot patterns for perforations and textures. Optional very subtle paper grain (2–3% noise).
 - Clean, friendly, precise. Think engineering manual meets modern infographic. No 3D renders, no photos, no stock characters.
-- Logo colors must not be distorted. If the logo clashes with the palette, place it on a white badge.
+- Logo colors must not be distorted. **CO7 logo on the light theme:** use the transparent version ("CO" in ink `#1B2A3A`, "7" and brackets in brand red `#D0111B`), generated from the uploaded logo by removing its black background.
 
 **Typography:** IBM Plex Sans Arabic (fallbacks: Cairo, Tajawal).
 - Captions: Medium, **54–60 px** (at 1080 wide), ink color, centered, RTL.
-- Hero numbers: Bold, 140–200 px, coral.
+- Hero numbers: Bold, 140–200 px, brand red.
 - Labels/callouts: Regular, 30–34 px.
 - Make sure Arabic shaping is correct (browser rendering, `dir="rtl"`). Check every caption visually in the storyboard.
 
@@ -177,7 +177,7 @@ Wait for my answers. Then show a **storyboard preview**: render 6–8 key still 
 2. **Macro → micro transitions:** zoom into a part, then cross-dissolve into a magnified schematic (molecules, atoms, layers), and later pull back out to the full view.
 3. **Circular mask transitions** for the sting and for big jumps in scale.
 4. **Callouts:** a thin leader line draws itself (stroke-dashoffset, 0.4s), then the label fades in.
-5. **Captions:** fade from muted grey to ink (0.25s). The keyword turns **coral** or gets an underline that wipes in from right to left.
+5. **Captions:** fade from muted grey to ink (0.25s). The keyword turns **brand red** (or sky blue for water/cold words) and gets an underline that wipes in from right to left.
 6. **Looping micro-motion** so no frame is ever static: spinning drums and fans, waves, heat squiggles, floating particles.
 7. **Arrows** animate along paths to show flow and direction.
 8. **Analogy badge:** a small pictogram card pops into the top corner (scale 0→1, `back.out`) when an analogy is spoken.
@@ -185,15 +185,15 @@ Wait for my answers. Then show a **storyboard preview**: render 6–8 key still 
 10. **Pacing:** a new caption every ~1.3s, and a visual change every 2–4s.
 
 ### 3.5 Branded fixed pieces (identical in every video)
-- **Intro sting (≈2s):** the hook scene shrinks into a circle, the CO7 logo sits above it, and a **sky-blue progress ring** fills around the circle like a timer. The dialect's tagline appears with "دقيقة" in coral. The circle then zooms into the first mechanism scene.
-- **Recap card:** a small labelled diagram (numbered callouts 1–4), the hero number in coral, 3 takeaway lines, and "معلومة زيادة" in grey.
+- **Intro sting (≈2s):** the hook scene shrinks into a circle, the CO7 logo sits above it, and a **sky-blue progress ring** fills around the circle like a timer. The dialect's tagline appears with "دقيقة" in brand red. The circle then zooms into the first mechanism scene.
+- **Recap card:** a small labelled diagram (numbered callouts 1–4), the hero number in brand red, 3 takeaway lines, and "معلومة زيادة" in grey.
 - **CTA end card (≈3s):** a framed box with the dialect's CTA on two lines, plus a blinking text cursor and the CO7 logo.
 
 ### 3.6 Quality checklist (run before delivering)
 - [ ] Video duration = voice-over duration (+ ≤0.5s tail). Audio and visuals in sync within 2 frames.
 - [ ] No hard cuts. No frame where nothing moves for more than 1.5s.
 - [ ] Re-hook at least every 20s. Hero number and recap card present.
-- [ ] Coral is used only for emphasis. Text contrast passes (ink on white).
+- [ ] Brand red is used only for emphasis. Text contrast passes (ink on white).
 - [ ] Arabic text is shaped correctly, nothing is clipped, and nothing sits inside platform UI zones.
 - [ ] `ffprobe` confirms the resolution, fps, codec and audio. Loudness is about −14 LUFS for social platforms.
 - [ ] Show me a contact sheet (1 frame/second) of the final render before delivery.
@@ -205,7 +205,7 @@ Wait for my answers. Then show a **storyboard preview**: render 6–8 key still 
 ### Files
 - `video_9x16.mp4` and/or `video_16x9.mp4`
 - `captions.srt` (Arabic)
-- `thumbnail_16x9.png` (1280×720) and `cover_9x16.png` (1080×1920): bold Arabic text of 3–5 words, the hero object, one coral element
+- `thumbnail_16x9.png` (1280×720) and `cover_9x16.png` (1080×1920): bold Arabic text of 3–5 words, the hero object, one brand-red element
 - `seo_pack.md`
 
 ### SEO pack (for each platform I selected)
