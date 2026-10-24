@@ -30,6 +30,7 @@ for s, e in segs[1:]:
     else:
         merged.append([s, e])
 
+merged = [m for m in merged if (m[1] - m[0]) * HOP >= 0.1]   # drop clicks/blips shorter than 0.1 s
 pad = int(sr * 0.03)            # keep 30 ms around each phrase so consonants aren't clipped
 fade = int(sr * 0.008)
 gap = np.zeros(int(sr * GAP), dtype=np.float32)
