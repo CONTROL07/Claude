@@ -47,6 +47,6 @@ python3 -I $KIT/tools/make_lines.py videos/<slug>/voiceover.txt videos/<slug>/as
 node $KIT/tools/render.js videos/<slug>/build stills /tmp/stills 1.5 4 10 ...
 node $KIT/tools/render.js videos/<slug>/build cover videos/<slug>/cover_9x16.png
 node $KIT/tools/render.js videos/<slug>/build video videos/<slug>/video_9x16.mp4 videos/<slug>/assets/voiceover_tight.wav 30
-python3 -I $KIT/tools/srt.py videos/<slug>/assets/lines.json videos/<slug>/captions.srt
+python3 -I $KIT/tools/srt.py videos/<slug>/assets/lines.json videos/<slug>/captions.srt 1.6 videos/<slug>/assets/display_fixes.json   # same fixes as VIDEO.display
 ```
 Whisper model (multilingual, used for Arabic): `https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-whisper-base.tar.bz2` + `pip install sherpa-onnx`.

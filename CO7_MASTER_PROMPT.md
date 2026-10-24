@@ -167,7 +167,7 @@ Steps:
 Render **10 stills** (hook, sting, 1 per mechanism step, micro, bonus, recap, CTA) with `render.js stills`, combine them into one contact sheet, show it to me, and **wait for "GO"**. Fix anything that overlaps or clips before showing it.
 
 ### 3.6 Production
-`render.js video` → `video_9x16.mp4`; `render.js cover` → `cover_9x16.png`; `srt.py` → `captions.srt`.
+`render.js video` → `video_9x16.mp4`; `render.js cover` → `cover_9x16.png`; `srt.py` → `captions.srt` (pass `assets/display_fixes.json` = the same map as `VIDEO.display`).
 
 ### 3.7 QA checklist (report each point)
 - [ ] `ffprobe`: 1080×1920, 30 fps, H.264 + AAC 48 kHz. Duration = `audioEnd + 1.6 s`. Loudness ≈ −14 LUFS.
