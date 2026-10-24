@@ -47,7 +47,8 @@ If DIALECT is empty, ask me before writing anything.
 | **Chapter timeline** | Top-right, right-to-left (RTL): 4–6 equal segments (grey track `#D6E9F7`) that fill in brand red as each chapter plays, a red playhead dot on the active segment, numbers `01…06` and chapter labels underneath (active = ink bold, done = dark grey, upcoming = light grey) |
 | Illustration window | x 60–1020, y 230–1260, thin ink border. All motion happens here. |
 | Captions | y 1330, IBM Plex Sans Arabic 500, 58 px, centered RTL. Each line fades grey → ink in 0.22 s; keywords turn brand red (or sky blue for water/cold words) with an underline that wipes in right → left |
-| Intro sting | On the tagline line: the scene shrinks into a circle (r 262), a sky-blue ring fills like a timer, and the CO7 logo appears under the circle |
+| Like + subscribe | On the "دير لايك واشتراك" line (`VIDEO.likeLine`): a white **لايك** pill and a red **اشتراك** pill pop up at the bottom of the window, and a cursor taps like (turns sky blue) then subscribe (turns ink, "مشترك ✓") |
+| Intro sting | On the "كمل معايا باش تعرف" line (`VIDEO.stingLine`): the scene shrinks into a circle (r 262), a sky-blue ring fills like a timer, and the CO7 logo appears under the circle |
 | Recap card | Title, small numbered diagram (1–4), legend, hero number in brand red (112 px), 3 takeaways |
 | CTA end card | CO7 logo + framed box with the dialect's CTA on 2 lines + blinking cursor; held 1.6 s after the voice ends |
 | Palette | bg `#F8FBFE` · panel `#EAF5FD` · grid `#D6E9F7` · ink `#1B2A3A` · sky blue `#2E9BEA` · light blue `#BFE2F8` · **brand red `#D0111B`** · mint `#3CC8A0` · sun `#FFC83D` · grey `#9AA8B8`. Use no other colors except neutral material tints (metal `#DCE6EF`, food `#F2D3A0`). |
@@ -58,12 +59,14 @@ If DIALECT is empty, ask me before writing anything.
 
 ## DIALECT
 
-Every spoken and on-screen word (script, captions, labels, chapter names, tagline, CTA, recap card) is in the chosen dialect, spelled the way people type it on social media.
+Every spoken and on-screen word (script, captions, labels, chapter names, like line, keep-watching line, CTA, recap card) is in the chosen dialect, spelled the way people type it on social media.
 
 | | **a) Moroccan Darija** | **b) Egyptian Arabic** |
 |---|---|---|
-| Hook example | "علاش فاش تانسخنو الماكلة فالمايكروويف… ماتايسخنش الطبسيل؟" | "ليه المايكروويف بيسخّن الأكل… ومش بيسخّن الطبق؟" |
-| Tagline (sting) | **"غادي نفهمك فدقيقة."** (keyword: فدقيقة) | **"افهمها في دقيقة."** (keyword: دقيقة) |
+| Hook first word | **علاش** (why: a cause, a paradox) or **كيفاش** (how: how it works, how it's made) | **ليه** (why) or **إزاي** (how) |
+| Hook example | "علاش فاش تانسخنو الماكلة فالمايكروويف… ماتايسخنش الطبسيل؟" / "كيفاش تاتخدم الثلاجة…؟" | "ليه المايكروويف بيسخّن الأكل… ومش بيسخّن الطبق؟" / "إزاي التلاجة بتبرّد…؟" |
+| Like line (exact) | **"دير لايك واشتراك…"** (keywords: لايك, اشتراك) | **"اعمل لايك واشتراك…"** (keywords: لايك, اشتراك) |
+| Keep-watching line = sting (exact) | **"وكمل معايا باش تعرف."** (keyword: تعرف) | **"وكمّل معايا عشان تعرف."** (keyword: تعرف) |
 | Re-hook style | "وشنو تايدير الما؟" / "والطبسيل؟ علاش؟" | "طب المية بتعمل إيه؟" / "طب والطبق؟" |
 | Bonus opener | "والغريب؟" | "والغريبة؟" |
 | Analogy opener | "بحال…" | "زي…" / "شبه…" |
@@ -79,13 +82,14 @@ For **c) other**, write the same table for that dialect first and get my approva
 ### Mandatory structure (≈60 s short)
 | # | Block | Rule |
 |---|---|---|
-| 1 | **HOOK** (lines 1–2) | **The very first line is the topic itself, asked directly as a question.** No intro, no greeting. Split it over 2 lines with "…". |
-| 2 | **STING** (line 3) | The dialect's tagline, exactly as written above. The engine plays the sting on this line. |
-| 3 | **MECHANISM** | 4–7 ordered steps, zooming from the whole object down to parts, then materials, then molecules or atoms |
-| 4 | **RE-HOOKS** | A new question line every 15–20 s |
-| 5 | **BONUS FACT** | Starts with the dialect's bonus opener; one surprising fact or a simple comparison |
-| 6 | **RECAP** (2 lines) | "يعني…" + the one-sentence answer |
-| 7 | **CTA** (last 2 lines) | The dialect's CTA, exactly as written above |
+| 1 | **HOOK** (lines 1–2) | **The very first word is always "علاش" or "كيفاش"** (Egyptian: "ليه" / "إزاي"): **علاش** when the topic asks why (a cause or a paradox), **كيفاش** when it asks how something works or is made. The first line is the topic itself as a direct question. No intro, no greeting. Split it over 2 lines with "…". |
+| 2 | **LIKE CTA** (line 3) | Exactly the dialect's like line: "دير لايك واشتراك…". The engine plays the like + subscribe animation on it. |
+| 3 | **KEEP WATCHING + STING** (line 4) | Exactly the dialect's keep-watching line: "وكمل معايا باش تعرف.". The engine plays the logo sting on it. |
+| 4 | **MECHANISM** | 4–7 ordered steps, zooming from the whole object down to parts, then materials, then molecules or atoms |
+| 5 | **RE-HOOKS** | A new question line every 15–20 s |
+| 6 | **BONUS FACT** | Starts with the dialect's bonus opener; one surprising fact or a simple comparison |
+| 7 | **RECAP** (2 lines) | "يعني…" + the one-sentence answer |
+| 8 | **CTA** (last 2 lines) | The dialect's CTA, exactly as written above |
 
 ### Writing rules
 - **Very short lines: 3–7 words**. One line = one caption ≈ 1.2–1.6 s. End unfinished lines with "…".
@@ -134,7 +138,7 @@ Steps:
 ## PHASE 3 — STORYBOARD → GO → PRODUCTION
 
 ### 3.1 Fill `video.js`
-`audioEnd` (tightened length), `tail: 1.6`, `stingLine: 2`, `recapLine`, `ctaLine`, `chapters` (with `at` = start time of the chapter's first line), `display` (caption fixes such as removing harakat), `keywords` (exact words from each line, `'r'` or `'b'`), `recap`, `cta`, `cover`. Use `co7-kit/examples/microwave/video.js` as the template.
+`audioEnd` (tightened length), `tail: 1.6`, `likeLine: 2` (the like line), `stingLine: 3` (the keep-watching line), `recapLine`, `ctaLine`, `chapters` (with `at` = start time of the chapter's first line), `display` (caption fixes such as removing harakat), `keywords` (exact words from each line, `'r'` or `'b'`), `recap`, `cta`, `cover`. Use `co7-kit/examples/microwave/video.js` as the template. That example predates the like line (`likeLine: null`, sting on its tagline). New videos always follow the structure above.
 
 ### 3.2 Write `scene.js` (follow `examples/microwave/scene.js` exactly in structure and style)
 - `build(K)`: draw the **world** into `K.layers.camera` with `K.iso(428, 500)`, `K.box`, and the outline style `K.S`. Make each **micro scene** with `K.micro()`, the **badges** with `K.badge()`, and the **callouts** with `K.callout()`. Define every animation as a `K.track(...)` keyed to the line times in `lines.js`.

@@ -3,7 +3,8 @@ window.VIDEO = {
   slug: 'microwave',
   audioEnd: 58.28,                 // length of the tightened voice-over (s)
   tail: 1.6,                       // end card hold after the voice ends (s)
-  stingLine: 2,                    // index in LINES of the tagline ("غادي نفهمك فدقيقة.")
+  likeLine: null,                  // index of "دير لايك واشتراك…" (new videos: 2). This older example has none.
+  stingLine: 2,                    // index of the sting line (new videos: 3 = "وكمل معايا باش تعرف.")
   recapLine: 28,                   // first line spoken over the recap card
   ctaLine: 30,                     // first CTA line (captions hide, end card shows)
   chapters: [                      // 4–6 chapters, labels ≤ 7 letters, `at` = start time (s)

@@ -98,6 +98,49 @@ const stingLogo = el('image', { href: 'logo_light.png', x: 400, y: 790, width: 1
 const dimR = el('rect', { width: 960, height: 1030, fill: C.bg, opacity: 0 });
 const badgeL = el('g');
 
+// like + subscribe overlay (plays on VIDEO.likeLine): two pills, a cursor taps like, then subscribe
+const subG = el('g', { opacity: 0 });
+function pill(cx, label, fill, color) {
+  const g = el('g', {}, subG);
+  el('rect', { x: cx - 150, y: 852, width: 300, height: 100, rx: 50, fill: C.ink, opacity: 0.08, transform: 'translate(0,8)' }, g);
+  const bg = el('rect', { x: cx - 150, y: 852, width: 300, height: 100, rx: 50, fill, ...S, 'stroke-width': 3 }, g);
+  const icon = el('g', { transform: `translate(${cx + 80},902)` }, g);
+  const tx = el('text', { x: cx - 20, y: 917, 'font-size': 42, 'font-weight': 700, fill: color, 'text-anchor': 'middle' }, g);
+  tx.textContent = label;
+  return { g, bg, icon, tx, cx };
+}
+const likeP = pill(310, 'لايك', '#fff', C.ink);
+const thumb = el('path', { d: 'M-22,6 h10 v26 h-10z M-8,32 h26 c6,0 9,-4 10,-9 l5,-20 c1,-6 -3,-10 -9,-10 h-14 l3,-14 c1,-6 -3,-11 -8,-11 l-13,24 z', ...S, 'stroke-width': 3, fill: C.lblue, transform: 'translate(0,-6) scale(0.95)' }, likeP.icon);
+const subP = pill(650, 'اشتراك', C.red, '#fff');
+const bell = el('path', { d: 'M0,-26 c-13,0 -20,10 -20,22 v12 l-7,9 h54 l-7,-9 v-12 c0,-12 -7,-22 -20,-22z M-7,20 a7,7 0 0 0 14,0', fill: '#fff', stroke: '#fff', 'stroke-width': 2, 'stroke-linejoin': 'round' }, subP.icon);
+const check = el('path', { d: 'M-18,0 l12,12 l24,-26', fill: 'none', stroke: '#fff', 'stroke-width': 7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: 0 }, subP.icon);
+const cursor = el('path', { d: 'M0,0 L0,46 L12,35 L21,55 L30,51 L21,32 L37,32 Z', fill: '#fff', ...S, 'stroke-width': 3 }, subG);
+function likeSub(t) {
+  const i = VIDEO.likeLine;
+  if (i == null) { set(subG, { opacity: 0 }); return; }
+  const s = LINES[i].s, next = LINES[i + 1] ? LINES[i + 1].s : LINES[i].e + 0.5, d = Math.max(1.2, next - s);
+  const u = (t - s) / d;
+  const op = clamp((t - s + 0.05) / 0.25) * (1 - clamp((t - next + 0.05) / 0.25));
+  set(subG, { opacity: op.toFixed(3) });
+  if (op <= 0) return;
+  [likeP, subP].forEach((p, k) => {
+    const pop = EASE.b(clamp((t - s - k * 0.08) / 0.35));
+    const tapAt = k ? 0.72 : 0.42, press = 1 - 0.08 * Math.max(0, 1 - Math.abs(u - tapAt) / 0.05);
+    set(p.g, { transform: `translate(${p.cx},902) scale(${(pop * press).toFixed(3)}) translate(${-p.cx},-902)` });
+  });
+  const liked = u >= 0.42, subbed = u >= 0.72;
+  set(likeP.bg, { fill: liked ? C.blue : '#fff' }); set(likeP.tx, { fill: liked ? '#fff' : C.ink });
+  set(thumb, { fill: liked ? '#fff' : C.lblue });
+  set(subP.bg, { fill: subbed ? C.ink : C.red });
+  subP.tx.textContent = subbed ? 'مشترك' : 'اشتراك';
+  set(bell, { opacity: subbed ? 0 : 1 }); set(check, { opacity: subbed ? 1 : 0 });
+  // cursor: enters bottom-right, taps like, then subscribe
+  const path = [[880, 1080], [300, 915], [640, 915]];
+  const m1 = EASE.io(clamp((u - 0.12) / 0.28)), m2 = EASE.io(clamp((u - 0.5) / 0.2));
+  const x = lerp(lerp(path[0][0], path[1][0], m1), path[2][0], m2), y = lerp(lerp(path[0][1], path[1][1], m1), path[2][1], m2);
+  set(cursor, { transform: `translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${u > 0.4 && u < 0.46 || u > 0.7 && u < 0.76 ? 0.85 : 1})` });
+}
+
 // ---------- reusable components ----------
 function box(P, x0, x1, y0, y1, z0, z1, fills, parent) {
   const g = el('g', {}, parent);
@@ -238,6 +281,7 @@ function render(t) {
   recap.style.transform = `translateY(${((1 - EASE.o(rc)) * 30).toFixed(1)}px)`;
   cta.style.opacity = EASE.o(ct).toFixed(3);
   document.querySelector('#cta .cursor').style.opacity = Math.floor(t * 2) % 2 ? 0 : 1;
+  likeSub(t);
   captions(t);
   timeline(t);
 }
@@ -252,7 +296,7 @@ const K = window.K = {
     window.SCENE.build(K);
     if (window.SCENE.recap) window.SCENE.recap(document.getElementById('recapArt'), K);
     // keep engine overlays above scene content
-    [dimR, microBg, microGrid, microL, stingMask, stingG, badgeL].forEach(n => svg.appendChild(n));
+    [dimR, microBg, microGrid, microL, stingMask, stingG, badgeL, subG].forEach(n => svg.appendChild(n));
     window.__END = VIDEO.audioEnd + (VIDEO.tail || 1.6);
     window.__seek = t => { render(t); return true; };
     window.__ready = document.fonts.ready.then(() => { render(0); return true; });

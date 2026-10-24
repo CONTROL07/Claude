@@ -34,7 +34,7 @@ co7-kit/
 - Tracks the engine reads: `cam` = `[focusX, focusY, scale]` (default `[480,560,1.18]`), `micro` (blue panel opacity), `dim`.
 - `render(t, K)` sets attributes from `K.V(name, t)` and from `t` itself (loops). Never use `Date.now()` or random numbers that aren't seeded: every frame must be reproducible.
 - `recap(svg, K)` draws the small numbered diagram on the recap card. Its numbers 1–4 match `VIDEO.recap.legend`.
-- The engine handles these on its own: the iris sting on `VIDEO.stingLine`, the recap card on `recapLine`, the CTA card on `ctaLine`, the captions with keyword colors, and the chapter timeline.
+- The engine handles these on its own: the like + subscribe animation on `VIDEO.likeLine`, the iris sting on `VIDEO.stingLine`, the recap card on `recapLine`, the CTA card on `ctaLine`, the captions with keyword colors, and the chapter timeline.
 
 ## Commands
 ```bash
