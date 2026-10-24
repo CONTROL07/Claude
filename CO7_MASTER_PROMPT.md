@@ -79,7 +79,7 @@ Write a voice-over script in the **chosen dialect**, speaking directly to the vi
 1. **Title idea** (working title).
 2. **Script table** with columns: `# | Time | Voice-over line (Arabic) | Visual on screen | Keyword to highlight`.
 3. **Clean voice-over text**: only the Arabic lines, one per line, ready for me to record or paste into a TTS tool. Add harakat (diacritics) only on words that are easy to mispronounce.
-4. **Recording tips**: pace, where to pause, and which words to stress.
+4. **Recording tips**: pace and which words to stress. Pauses don't matter: I remove them in production.
 
 Then **stop and wait** for my approval or edits.
 
@@ -117,9 +117,10 @@ Wait for my answers. Then show a **storyboard preview**: render 6–8 key still 
 - Build the animation as **HTML + inline SVG + GSAP** (install `gsap` and fonts from npm, for example `@fontsource/ibm-plex-sans-arabic`; never rely on a CDN).
 - One master **GSAP timeline**, paused, driven frame by frame (`timeline.seek(frame / fps)`), rendered with **Playwright/Chromium** screenshots, then encoded with **ffmpeg**:
   `H.264, yuv420p, CRF 18, AAC 192k, -movflags +faststart`. Mux the uploaded voice-over as the audio track.
+- **Tighten the voice-over first (no dead air):** detect every pause (about −40 dB, ≥0.15s) and shorten it to **0.12s**, keeping 30 ms around each phrase and short fades so nothing clicks. The narration must flow without breaks, like popular explainer channels. Show me the duration before and after.
 - **Timing from the voice-over:**
   1. Try word-level transcription (e.g. Whisper) to get timestamps.
-  2. If transcription isn't available, align the **approved script lines** to the audio using `ffmpeg silencedetect` pauses. Each line maps to one speech segment.
+  2. If transcription isn't available, align the **approved script lines** to the speech phrases found while tightening (each "…" in the script usually creates its own phrase).
   3. Every visual action starts **on the exact word** it illustrates (the word "تلف" → the drum spins; the word "تنفتح" → the shell opens).
 - Keep all work in the scratchpad. Save final deliverables in `output/{slug}/`.
 
