@@ -53,14 +53,11 @@ const fs = require('fs');
     const fps = Number(fpsArg || 30);
     const end = await page.evaluate(() => window.__END);
     const frames = Math.ceil(end * fps);
-    const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-i', footage, '-f', 'image2pipe', '-framerate', String(fps), '-i', '-',
-      '-filter_complex',
-      `color=c=0xF8FBFE:s=1080x1920:r=${fps}:d=${end}[bg];` +
-      `[0:v]fps=${fps},scale=958:1028:force_original_aspect_ratio=increase,crop=958:1028,setsar=1[fv];` +
-      `[bg][fv]overlay=61:231:eof_action=repeat[b];[b][1:v]overlay=0:0:format=auto[v];` +
-      `[0:a]loudnorm=I=-14:TP=-1.5:LRA=11,apad=whole_dur=${end}[a]`,
-      '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', String(fps),
-      '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', String(end), '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    // pass 1: graphics layer (with alpha) to a lossless file. Compositing straight from the slow screenshot pipe
+    // let ffmpeg drop footage frames while the two inputs drifted apart (empty window for seconds at a time).
+    const layer = out.replace(/\.mp4$/, '') + '_layer.mov';
+    const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-',
+      '-c:v', 'qtrle', '-pix_fmt', 'argb', layer], { stdio: ['pipe', 'inherit', 'inherit'] });
     for (let f = 0; f < frames; f++) {
       await page.evaluate(t => window.__seek(t), f / fps);
       const buf = await page.screenshot({ type: 'png', omitBackground: true });
@@ -69,6 +66,16 @@ const fs = require('fs');
     }
     ff.stdin.end();
     await new Promise(r => ff.on('close', r));
+    // pass 2: footage in the window, graphics on top, voice normalised
+    await new Promise(r => spawn('ffmpeg', ['-y', '-v', 'error', '-i', footage, '-i', layer,
+      '-filter_complex',
+      `color=c=0xF8FBFE:s=1080x1920:r=${fps}:d=${end}[bg];` +
+      `[0:v]fps=${fps},scale=958:1028:force_original_aspect_ratio=increase,crop=958:1028,setsar=1[fv];` +
+      `[bg][fv]overlay=61:231:eof_action=repeat[b];[b][1:v]overlay=0:0:format=auto[v];` +
+      `[0:a]loudnorm=I=-14:TP=-1.5:LRA=11,apad=whole_dur=${end}[a]`,
+      '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', String(fps),
+      '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', String(end), '-movflags', '+faststart', out], { stdio: 'inherit' }).on('close', r));
+    fs.unlinkSync(layer);
   } else {
     console.error('mode must be stills | video | cover | footage'); process.exitCode = 2;
   }
