@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>CO7 video</title>
+<!-- CO7 BRAND SHELL — do not edit per video. Per-video content lives in video.js, lines.js and scene.js. -->
+<style>
+  @font-face { font-family: Plex; font-weight: 400; src: url(fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E; }
+  @font-face { font-family: Plex; font-weight: 500; src: url(fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E; }
+  @font-face { font-family: Plex; font-weight: 600; src: url(fonts/ibm-plex-sans-arabic-arabic-600-normal.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E; }
+  @font-face { font-family: Plex; font-weight: 700; src: url(fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E; }
+  @font-face { font-family: Plex; font-weight: 400; src: url(fonts/ibm-plex-sans-arabic-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF; }
+  @font-face { font-family: Plex; font-weight: 500; src: url(fonts/ibm-plex-sans-arabic-latin-500-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF; }
+  @font-face { font-family: Plex; font-weight: 600; src: url(fonts/ibm-plex-sans-arabic-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF; }
+  @font-face { font-family: Plex; font-weight: 700; src: url(fonts/ibm-plex-sans-arabic-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF; }
+
+  :root {
+    --bg: #F8FBFE; --panel: #EAF5FD; --grid: #D6E9F7; --ink: #1B2A3A;
+    --blue: #2E9BEA; --lblue: #BFE2F8; --red: #D0111B; --mint: #3CC8A0;
+    --sun: #FFC83D; --grey: #9AA8B8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+  body { font-family: Plex, sans-serif; color: var(--ink); position: relative; }
+  svg text { font-family: Plex, sans-serif; }
+
+  /* frame + crop marks */
+  #frame { position: absolute; left: 40px; top: 40px; width: 1000px; height: 1840px; border: 2px solid var(--ink); opacity: .85; }
+  .crop { position: absolute; width: 34px; height: 34px; border-color: var(--ink); border-style: solid; opacity: .6; }
+  .crop.tl { left: 22px; top: 22px; border-width: 2px 0 0 2px; }
+  .crop.tr { right: 22px; top: 22px; border-width: 2px 2px 0 0; }
+  .crop.bl { left: 22px; bottom: 22px; border-width: 0 0 2px 2px; }
+  .crop.br { right: 22px; bottom: 22px; border-width: 0 2px 2px 0; }
+
+  /* header: logo (left) + chapter timeline (right, RTL) */
+  #logo { position: absolute; left: 80px; top: 96px; height: 92px; }
+  #tl { position: absolute; left: 236px; top: 104px; width: 764px; height: 96px; overflow: visible; }
+
+  /* illustration window */
+  #win { position: absolute; left: 60px; top: 230px; width: 960px; height: 1030px; border: 2px solid var(--ink); overflow: hidden; background: var(--bg); }
+  #rule { position: absolute; left: 140px; right: 140px; top: 1300px; height: 2px; background: var(--ink); opacity: .35; }
+
+  /* footage mode: page is transparent except the brand surround; the user's video shows inside the window */
+  html:has(body.footage), body.footage { background: transparent; }
+  body.footage #win { background: transparent; box-shadow: 0 0 0 3000px var(--bg); z-index: 1; }
+  body.footage #frame, body.footage .crop, body.footage #logo, body.footage #tl, body.footage #rule, body.footage #cap { z-index: 2; }
+
+  /* captions */
+  #cap { position: absolute; left: 70px; right: 70px; top: 1330px; min-height: 160px; text-align: center; font-size: 58px; font-weight: 500; line-height: 1.35; color: var(--ink); }
+  #cap .k { position: relative; }
+  #cap .k::after { content: ""; position: absolute; right: 0; bottom: -4px; height: 5px; width: var(--u, 0%); background: currentColor; border-radius: 3px; }
+  #cap .r { color: var(--red); }
+  #cap .b { color: var(--blue); }
+
+  /* recap card */
+  .card { position: absolute; inset: 0; background: var(--bg); opacity: 0; }
+  #recap .title { position: absolute; top: 40px; left: 50px; right: 50px; font-size: 50px; font-weight: 700; line-height: 1.3; }
+  #recap .legend { position: absolute; top: 600px; left: 50px; right: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 30px; font-size: 30px; font-weight: 500; }
+  #recap .legend span { display: inline-flex; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--ink); align-items: center; justify-content: center; font-size: 24px; margin-left: 12px; }
+  #recap .hero { position: absolute; top: 720px; left: 50px; right: 50px; display: flex; align-items: center; gap: 26px; }
+  #recap .hero b { font-size: 112px; font-weight: 700; color: var(--red); direction: ltr; white-space: nowrap; }
+  #recap .hero p { font-size: 32px; font-weight: 600; line-height: 1.35; }
+  #recap .pts { position: absolute; top: 885px; left: 50px; right: 50px; font-size: 27px; color: #5B6878; line-height: 1.45; }
+
+  /* CTA end card */
+  #cta { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  #cta img { height: 150px; margin-bottom: 60px; }
+  #cta .box { position: relative; width: 800px; padding: 60px 40px; border: 3px solid var(--ink); text-align: center; }
+  #cta .box::before, #cta .box::after { content: ""; position: absolute; width: 40px; height: 40px; border: 3px solid var(--red); }
+  #cta .box::before { top: -16px; right: -16px; border-width: 3px 3px 0 0; }
+  #cta .box::after { bottom: -16px; left: -16px; border-width: 0 0 3px 3px; }
+  #cta .l1 { font-size: 46px; font-weight: 600; margin-bottom: 26px; }
+  #cta .l2 { font-size: 58px; font-weight: 700; color: var(--red); }
+  #cta .field { margin: 40px auto 0; width: 520px; height: 70px; border-bottom: 4px solid var(--blue); position: relative; }
+  #cta .cursor { position: absolute; right: 10px; top: 6px; width: 5px; height: 58px; background: var(--ink); }
+</style>
+</head>
+<body>
+  <div id="frame"></div>
+  <div class="crop tl"></div><div class="crop tr"></div><div class="crop bl"></div><div class="crop br"></div>
+  <img id="logo" src="logo_light.png" alt="">
+  <svg id="tl" viewBox="0 0 764 96" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="win">
+    <svg id="svg" width="960" height="1030" viewBox="0 0 960 1030" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="recap" class="card">
+      <div class="title"></div>
+      <svg id="recapArt" width="960" height="1030" viewBox="0 0 960 1030" style="position:absolute;inset:0"></svg>
+      <div class="legend"></div>
+      <div class="hero"><b></b><p></p></div>
+      <div class="pts"></div>
+    </div>
+    <div id="cta" class="card">
+      <img src="logo_light.png" alt="">
+      <div class="box">
+        <div class="l1"></div>
+        <div class="l2"></div>
+        <div class="field"><div class="cursor"></div></div>
+      </div>
+    </div>
+  </div>
+  <div id="rule"></div>
+  <div id="cap"></div>
+<script src="lib/gsap.min.js"></script>
+<script src="video.js"></script>
+<script src="lines.js"></script>
+<script src="engine.js"></script>
+<script src="scene.js"></script>
+<script>K.start();</script>
+</body>
+</html>
