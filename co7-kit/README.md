@@ -16,7 +16,8 @@ co7-kit/
     asr_segments.py   transcribes each phrase (sherpa-onnx Whisper) to map phrases to script lines
     align.py          fallback: maps script lines to phrases by duration when transcription fails
     make_lines.py     writes lines.json + build/lines.js from the phrase→line grouping
-    render.js         stills / cover / final MP4 (Playwright + ffmpeg, −14 LUFS)
+    render.js         stills / cover / final MP4 / footage (user video in the window + graphics layer)
+    jumpcut.py        footage mode: removes pauses with jump cuts (or keeps the video), writes footage.mp4 + voice.wav + segments.json
     srt.py            captions.srt from lines.json
     logo_light.py     rebuilds logo_light.png from the logo on a black background
   examples/microwave/ reference video: video.js, lines.js, scene.js, voiceover_tight.wav
@@ -50,3 +51,6 @@ node $KIT/tools/render.js videos/<slug>/build video videos/<slug>/video_9x16.mp4
 python3 -I $KIT/tools/srt.py videos/<slug>/assets/lines.json videos/<slug>/captions.srt 1.6 videos/<slug>/assets/display_fixes.json   # same fixes as VIDEO.display
 ```
 Whisper model (multilingual, used for Arabic): `https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-whisper-base.tar.bz2` + `pip install sherpa-onnx`.
+
+## Footage mode (the user's own video)
+Set `footage: true` in `video.js`: the window becomes transparent and `render.js <build> footage <out.mp4> <footage.mp4>` composites the user's video inside it, under the graphics layer. Use the `cut` track for full illustration cutaways. `likeLine`, `stingLine`, `recapLine` and `ctaLine` may be `null`; with `ctaLine: null` the CTA end card plays in the tail.

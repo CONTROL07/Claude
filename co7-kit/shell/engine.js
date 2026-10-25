@@ -83,8 +83,13 @@ el('circle', { cx: 7, cy: 7, r: 2.2, fill: C.ink, opacity: 0.35 }, dots);
 const irisClip = el('clipPath', { id: 'iris' }, defs);
 const irisC = el('circle', { cx: 480, cy: 470, r: 900 }, irisClip);
 
+// footage mode: the window is transparent so the user's video (composited by render.js) shows through;
+// the 'cut' track fades in an opaque brand panel for full illustration cutaways.
+const FOOTAGE = !!(window.VIDEO && VIDEO.footage);
+const cutG = el('g', { opacity: FOOTAGE ? 0 : 1 });
+el('rect', { width: 960, height: 1030, fill: C.bg }, cutG);
+el('rect', { width: 960, height: 1030, fill: 'url(#grid)', opacity: 0.55 }, cutG);
 const worldG = el('g', { 'clip-path': 'url(#iris)' });
-el('rect', { width: 960, height: 1030, fill: 'url(#grid)', opacity: 0.55 }, worldG);
 const camG = el('g', {}, worldG);
 const microBg = el('rect', { width: 960, height: 1030, fill: C.panel, opacity: 0 });
 const microGrid = el('rect', { width: 960, height: 1030, fill: 'url(#grid)', opacity: 0 });
@@ -195,7 +200,8 @@ function captions(t) {
   const V0 = window.VIDEO;
   let i = -1;
   for (let k = 0; k < LINES.length; k++) if (t >= LINES[k].s - 0.06) i = k;
-  if (i >= V0.ctaLine) i = -1;                                    // CTA lines are shown in the end card
+  const ctaFrom = V0.ctaLine != null ? LINES[V0.ctaLine].s - 0.06 : V0.audioEnd;
+  if (t >= ctaFrom) i = -1;                                       // CTA lines are shown in the end card
   if (i !== capIdx) {
     capIdx = i;
     if (i < 0) { capEl.innerHTML = ''; return; }
@@ -263,19 +269,21 @@ function render(t) {
   const cam = V('cam', t) || [480, 560, 1.18];
   set(camG, { transform: `translate(480,500) scale(${cam[2].toFixed(4)}) translate(${(-cam[0]).toFixed(2)},${(-cam[1]).toFixed(2)})` });
   // iris sting (automatic, on the tagline line)
-  const [s0, s1] = STING;
+  const [s0, s1] = STING || [-99, -98];
   const irisR = t < s1 - 0.09 ? lerp(900, 262, EASE.o(clamp((t - s0 + 0.16) / 0.45))) : lerp(262, 900, EASE.i(clamp((t - s1 + 0.09) / 0.6)));
   set(irisC, { r: irisR.toFixed(1) });
   const so = clamp((t - s0 + 0.11) / 0.3) * (1 - EASE.i(clamp((t - s1 + 0.09) / 0.4)));
   set(stingG, { opacity: so.toFixed(3) }); set(stingMask, { opacity: so.toFixed(3) });
   set(ring, { 'stroke-dashoffset': (RING * (1 - EASE.io(clamp((t - s0) / Math.max(0.3, s1 - s0 - 0.1))))).toFixed(1) });
   set(stingLogo, { opacity: clamp((t - s0 - 0.04) / 0.3) });
+  if (FOOTAGE) set(cutG, { opacity: (V('cut', t) || 0).toFixed(3) });
   // micro panel + dim
   const mi = V('micro', t) || 0;
   set(microBg, { opacity: mi }); set(microGrid, { opacity: mi * 0.8 });
   set(dimR, { opacity: V('dim', t) || 0 });
   // cards
-  const rc = clamp((t - LINES[VIDEO.recapLine].s + 0.08) / 0.5), ct = clamp((t - LINES[VIDEO.ctaLine].s + 0.06) / 0.5);
+  const rc = VIDEO.recapLine != null ? clamp((t - LINES[VIDEO.recapLine].s + 0.08) / 0.5) : 0;
+  const ct = clamp((t - (VIDEO.ctaLine != null ? LINES[VIDEO.ctaLine].s - 0.06 : VIDEO.audioEnd + 0.05)) / 0.5);
   const recap = document.getElementById('recap'), cta = document.getElementById('cta');
   recap.style.opacity = (EASE.o(rc) * (1 - ct)).toFixed(3);
   recap.style.transform = `translateY(${((1 - EASE.o(rc)) * 30).toFixed(1)}px)`;
@@ -291,7 +299,8 @@ const K = window.K = {
   box, callout, badge, showBadge, thermo, h2o, place, micro, microScene,
   layers: { svg, world: worldG, camera: camG, micro: microL, badges: badgeL },
   start() {
-    STING = [LINES[VIDEO.stingLine].s, LINES[VIDEO.stingLine + 1].s];
+    STING = VIDEO.stingLine != null ? [LINES[VIDEO.stingLine].s, LINES[VIDEO.stingLine + 1].s] : null;
+    if (FOOTAGE) document.body.classList.add('footage');
     buildTimeline(); fillCards();
     window.SCENE.build(K);
     if (window.SCENE.recap) window.SCENE.recap(document.getElementById('recapArt'), K);

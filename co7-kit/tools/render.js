@@ -2,6 +2,7 @@
 //   node render.js <buildDir> stills <outDir> t1 t2 ...       -> PNG stills
 //   node render.js <buildDir> video <out.mp4> <voice.wav> [fps] -> final MP4 (H.264 + AAC, -14 LUFS)
 //   node render.js <buildDir> cover <out.png>                  -> 9:16 cover from VIDEO.cover
+//   node render.js <buildDir> footage <out.mp4> <footage.mp4> [fps] -> user video in the window + graphics (VIDEO.footage = true)
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const path = require('path');
@@ -46,8 +47,30 @@ const fs = require('fs');
     }
     ff.stdin.end();
     await new Promise(r => ff.on('close', r));
+  } else if (mode === 'footage') {
+    // user video inside the window + transparent motion-graphics layer on top
+    const [footage, fpsArg] = rest;
+    const fps = Number(fpsArg || 30);
+    const end = await page.evaluate(() => window.__END);
+    const frames = Math.ceil(end * fps);
+    const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-i', footage, '-f', 'image2pipe', '-framerate', String(fps), '-i', '-',
+      '-filter_complex',
+      `color=c=0xF8FBFE:s=1080x1920:r=${fps}:d=${end}[bg];` +
+      `[0:v]fps=${fps},scale=958:1028:force_original_aspect_ratio=increase,crop=958:1028,setsar=1[fv];` +
+      `[bg][fv]overlay=61:231:eof_action=repeat[b];[b][1:v]overlay=0:0:format=auto[v];` +
+      `[0:a]loudnorm=I=-14:TP=-1.5:LRA=11,apad=whole_dur=${end}[a]`,
+      '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', String(fps),
+      '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', String(end), '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    for (let f = 0; f < frames; f++) {
+      await page.evaluate(t => window.__seek(t), f / fps);
+      const buf = await page.screenshot({ type: 'png', omitBackground: true });
+      if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
+      if (f % 150 === 0) console.log(`frame ${f}/${frames}`);
+    }
+    ff.stdin.end();
+    await new Promise(r => ff.on('close', r));
   } else {
-    console.error('mode must be stills | video | cover'); process.exitCode = 2;
+    console.error('mode must be stills | video | cover | footage'); process.exitCode = 2;
   }
   await browser.close();
 })();

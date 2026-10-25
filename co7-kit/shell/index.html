@@ -40,6 +40,11 @@
   #win { position: absolute; left: 60px; top: 230px; width: 960px; height: 1030px; border: 2px solid var(--ink); overflow: hidden; background: var(--bg); }
   #rule { position: absolute; left: 140px; right: 140px; top: 1300px; height: 2px; background: var(--ink); opacity: .35; }
 
+  /* footage mode: page is transparent except the brand surround; the user's video shows inside the window */
+  html:has(body.footage), body.footage { background: transparent; }
+  body.footage #win { background: transparent; box-shadow: 0 0 0 3000px var(--bg); z-index: 1; }
+  body.footage #frame, body.footage .crop, body.footage #logo, body.footage #tl, body.footage #rule, body.footage #cap { z-index: 2; }
+
   /* captions */
   #cap { position: absolute; left: 70px; right: 70px; top: 1330px; min-height: 160px; text-align: center; font-size: 58px; font-weight: 500; line-height: 1.35; color: var(--ink); }
   #cap .k { position: relative; }
